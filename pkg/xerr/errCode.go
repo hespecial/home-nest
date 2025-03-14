@@ -1,0 +1,14 @@
+package xerr
+
+// OK 成功返回
+const OK uint32 = 200
+
+/**(前3位代表业务,后三位代表具体功能)**/
+
+// ServerCommonError 全局错误码
+const ServerCommonError uint32 = 100001
+const RequestParamError uint32 = 100002
+const TokenExpireError uint32 = 100003
+const TokenGenerateError uint32 = 100004
+const DbError uint32 = 100005
+const DbUpdateAffectedZeroError uint32 = 100006

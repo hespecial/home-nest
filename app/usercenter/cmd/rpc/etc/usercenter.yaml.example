@@ -1,0 +1,17 @@
+Name: usercenter.rpc
+ListenOn: 0.0.0.0:2004
+Mode: dev
+Log:
+  ServiceName: usercenter-rpc
+  Level: error
+JwtAuth:
+  AccessSecret: ae0536f9-6450-4606-8e13-5a19ed505da0
+  AccessExpire: 31536000
+DB:
+  DataSource: root:password@tcp(127.0.0.1:3306)/home_nest_usercenter?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Cache:
+  - Host: 127.0.0.1:6379
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Key: usercenter-rpc
