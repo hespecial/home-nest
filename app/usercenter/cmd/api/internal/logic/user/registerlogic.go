@@ -2,6 +2,9 @@ package user
 
 import (
 	"context"
+	"github.com/pkg/errors"
+	"home-nest/app/usercenter/cmd/rpc/usercenter"
+	"home-nest/app/usercenter/model"
 
 	"home-nest/app/usercenter/cmd/api/internal/svc"
 	"home-nest/app/usercenter/cmd/api/internal/types"
@@ -15,7 +18,6 @@ type RegisterLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// register
 func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
 	return &RegisterLogic{
 		Logger: logx.WithContext(ctx),
@@ -25,7 +27,19 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
-	// todo: add your logic here and delete this line
+	registerResp, err := l.svcCtx.UsercenterRpc.Register(l.ctx, &usercenter.RegisterReq{
+		Mobile:   req.Mobile,
+		Password: req.Password,
+		AuthKey:  req.Mobile,
+		AuthType: model.UserAuthTypeSystem,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(err, "req: %+v", req)
+	}
 
-	return
+	return &types.RegisterResp{
+		AccessToken:  registerResp.AccessToken,
+		AccessExpire: registerResp.AccessExpire,
+		RefreshAfter: registerResp.RefreshAfter,
+	}, nil
 }

@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"home-nest/app/usercenter/cmd/rpc/usercenter"
+	"home-nest/pkg/ctxdata"
 
 	"home-nest/app/usercenter/cmd/api/internal/svc"
 	"home-nest/app/usercenter/cmd/api/internal/types"
@@ -15,7 +17,6 @@ type DetailLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// get user info
 func NewDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DetailLogic {
 	return &DetailLogic{
 		Logger: logx.WithContext(ctx),
@@ -24,8 +25,24 @@ func NewDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DetailLogi
 	}
 }
 
-func (l *DetailLogic) Detail(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *DetailLogic) Detail(_ *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
+	userId := ctxdata.GetUidFromCtx(l.ctx)
 
-	return
+	userInfoResp, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{
+		Id: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.UserInfoResp{
+		UserInfo: types.User{
+			Id:       userInfoResp.User.Id,
+			Mobile:   userInfoResp.User.Mobile,
+			Nickname: userInfoResp.User.Nickname,
+			Sex:      userInfoResp.User.Sex,
+			Avatar:   userInfoResp.User.Avatar,
+			Info:     userInfoResp.User.Info,
+		},
+	}, nil
 }

@@ -37,7 +37,7 @@ service usercenter {
 service usercenter {
 	@doc "get user info"
 	@handler detail
-	post /user/detail (UserInfoReq) returns (UserInfoResp)
+	get /user/detail (UserInfoReq) returns (UserInfoResp)
 
 	@doc "wechat mini auth"
 	@handler wxMiniAuth
