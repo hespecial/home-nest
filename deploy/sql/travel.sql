@@ -1,19 +1,3 @@
-/*
- Navicat MySQL Data Transfer
-
- Source Server         : looklook
- Source Server Type    : MySQL
- Source Server Version : 80028
- Source Host           : 127.0.0.1:33069
- Source Schema         : looklook_travel
-
- Target Server Type    : MySQL
- Target Server Version : 80028
- File Encoding         : 65001
-
- Date: 10/03/2022 17:14:28
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -107,3 +91,9 @@ CREATE TABLE `homestay_comment` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='民宿评价';
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- app/travel/model
+-- goctl model mysql datasource --dir . --table homestay --cache true --url "root:password@tcp(127.0.0.1:3306)/home_nest_travel"
+-- goctl model mysql datasource --dir . --table homestay_activity --cache true --url "root:password@tcp(127.0.0.1:3306)/home_nest_travel"
+-- goctl model mysql datasource --dir . --table homestay_business --cache true --url "root:password@tcp(127.0.0.1:3306)/home_nest_travel"
+-- goctl model mysql datasource --dir . --table homestay_comment --cache true --url "root:password@tcp(127.0.0.1:3306)/home_nest_travel"

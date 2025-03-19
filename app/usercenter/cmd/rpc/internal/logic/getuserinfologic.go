@@ -13,7 +13,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-var ErrUserNoExistsError = xerr.NewErrMsg("用户不存在")
+var ErrUserNotExistsError = xerr.NewErrMsg("用户不存在")
 
 type GetUserInfoLogic struct {
 	ctx    context.Context
@@ -36,7 +36,7 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoReq) (*pb.GetUserInfoRe
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DbError), "GetUserInfo find user db err , id:%d , err:%v", in.Id, err)
 	}
 	if user == nil {
-		return nil, errors.Wrapf(ErrUserNoExistsError, "id:%d", in.Id)
+		return nil, errors.Wrapf(ErrUserNotExistsError, "id:%d", in.Id)
 	}
 
 	return &usercenter.GetUserInfoResp{

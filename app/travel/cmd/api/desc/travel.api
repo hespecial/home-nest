@@ -1,74 +1,61 @@
 syntax = "v1"
 
-info(
-	title: "旅游服务"
-	desc: "旅游服务"
-	author: "Mikael"
-	email: "13247629622@163.com"
+info (
+	title:   "旅游服务"
+	desc:    "旅游服务"
+	author:  "luxiao"
+	email:   "1478488313@qq.com"
 	version: "v1"
 )
 
 import (
 	"homestay/homestay.api"
 	"homestayBusiness/homestayBusiness.api"
-	"homestayComment/homestayComment.api"
 )
 
 //=====================================> travel-homestay v1 <=================================
-
 //no need login
-@server(
+@server (
 	prefix: travel/v1
-	group: homestay
+	group:  homestay_
 )
 service travel {
-	
 	@doc "homestay room list"
 	@handler homestayList
-	post /homestay/homestayList (HomestayListReq) returns (HomestayListResp)
-	
+	get /homestay/homestayList (HomestayListReq) returns (HomestayListResp)
+
 	@doc "boss's all homestay room"
 	@handler businessList
-	post /homestay/businessList (BusinessListReq) returns (BusinessListResp)
-	
+	get /homestay/businessList (BusinessListReq) returns (BusinessListResp)
+
 	@doc "guess your favorite homestay room"
 	@handler guessList
-	post /homestay/guessList (GuessListReq) returns (GuessListResp)
-	
+	get /homestay/guessList (GuessListReq) returns (GuessListResp)
+
 	@doc "homestay room detail"
 	@handler homestayDetail
-	post /homestay/homestayDetail (HomestayDetailReq) returns (HomestayDetailResp)
-	
+	get /homestay/homestayDetail (HomestayDetailReq) returns (HomestayDetailResp)
 }
 
 //====================================> travel-homestayBusiness v1 <====================================
 //no need login
-@server(
+@server (
 	prefix: travel/v1
-	group: homestayBussiness
+	group:  homestayBussiness_
 )
 service travel {
 	@doc "good boss"
 	@handler goodBoss
-	post /homestayBussiness/goodBoss (GoodBossReq) returns (GoodBossResp)
-	
+	get /homestayBussiness/goodBoss (GoodBossReq) returns (GoodBossResp)
+
 	@doc "business list"
 	@handler homestayBussinessList
-	post /homestayBussiness/homestayBussinessList (HomestayBussinessListReq) returns (HomestayBussinessListResp)
-	
+	get /homestayBussiness/homestayBussinessList (HomestayBussinessListReq) returns (HomestayBussinessListResp)
+
 	@doc "boss detail"
 	@handler homestayBussinessDetail
-	post /homestayBussiness/homestayBussinessDetail (HomestayBussinessDetailReq) returns (HomestayBussinessDetailResp)
+	get /homestayBussiness/homestayBussinessDetail (HomestayBussinessDetailReq) returns (HomestayBussinessDetailResp)
 }
 
-//========================> homestay-homestayComment v1 <===================================
-//no need login
-@server(
-	prefix: travel/v1
-	group: homestayComment
-)
-service travel {
-	@doc "homestay comment list"
-	@handler commentList
-	post /homestayComment/commentList (CommentListReq) returns (CommentListResp)
-}
+// app/travel/cmd/api
+// goctl api go --dir . --api ./desc/travel.api

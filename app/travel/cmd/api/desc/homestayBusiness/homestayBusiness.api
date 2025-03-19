@@ -3,8 +3,8 @@ syntax = "v1"
 info(
 	title: "民宿店铺服务"
 	desc: "民宿店铺服务"
-	author: "Mikael"
-	email: "13247629622@163.com"
+	author: "luxiao"
+	email: "1478488313@qq.com"
 	version: "v1"
 )
 
@@ -22,9 +22,8 @@ type HomestayBusiness {
 	Title     string  `json:"title"` //店铺名称
 	Info      string  `json:"info"`  //店铺介绍
 	Tags      string  `json:"tags"`  //标签，多个用“,”分割
-	Cover     string  `json:"cover"` //
-	Star      float64 `json:"star"`
-	IsFav     int64   `json:"isFav"`
+	Cover     string  `json:"cover"` //封面图
+	Star      float64 `json:"star"`	 //评分
 	HeaderImg string  `json:"headerImg"` //店招门头图片
 }
 
@@ -44,8 +43,8 @@ type (
 		PersonConsume int64 `json:"personConsume"` //个人消费
 	}
 	HomestayBussinessListReq {
-		LastId   int64 `json:"lastId"`
-		PageSize int64 `json:"pageSize"`
+		LastId   int64 `form:"lastId"`
+		PageSize int64 `form:"pageSize"`
 	}
 	HomestayBussinessListResp {
 		List []HomestayBusinessListInfo `json:"list"`
@@ -54,10 +53,9 @@ type (
 
 type (
 	HomestayBussinessDetailReq{
-		Id int64 `json:"id"`
+		Id int64 `form:"id"`
 	}
 	HomestayBussinessDetailResp{
 		Boss HomestayBusinessBoss `json:"boss"`
 	}
-	
 )

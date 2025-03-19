@@ -3,8 +3,8 @@ syntax = "v1"
 info(
 	title: "民宿服务"
 	desc: "民宿服务"
-	author: "Mikael"
-	email: "13247629622@163.com"
+	author: "luxiao"
+	email: "1478488313@qq.com"
 	version: "v1"
 )
 
@@ -27,9 +27,9 @@ type Homestay {
 
 type (
 	BusinessListReq {
-		LastId             int64 `json:"lastId"`
-		PageSize           int64 `json:"pageSize"`
-		HomestayBusinessId int64 `json:"homestayBusinessId"`
+		LastId             int64 `form:"lastId"`
+		PageSize           int64 `form:"pageSize"`
+		HomestayBusinessId int64 `form:"homestayBusinessId"`
 	}
 	BusinessListResp {
 		List []Homestay `json:"list"`
@@ -38,8 +38,8 @@ type (
 
 type (
 	HomestayListReq {
-		Page     int64 `json:"page"`
-		PageSize int64 `json:"pageSize"`
+		Page     int64 `form:"page"`
+		PageSize int64 `form:"pageSize"`
 	}
 	HomestayListResp {
 		List []Homestay `json:"list"`
@@ -56,7 +56,7 @@ type (
 
 type (
 	HomestayDetailReq {
-		Id int64 `json:"id"`
+		Id int64 `form:"id"`
 	}
 	HomestayDetailResp {
 		Homestay Homestay `json:"homestay"`
