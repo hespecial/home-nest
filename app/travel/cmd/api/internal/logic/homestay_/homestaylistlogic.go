@@ -2,13 +2,10 @@ package homestay_
 
 import (
 	"context"
-	"github.com/pkg/errors"
-	"home-nest/app/travel/cmd/rpc/travel"
-	"home-nest/pkg/tool"
-	"home-nest/pkg/xerr"
-
 	"home-nest/app/travel/cmd/api/internal/svc"
 	"home-nest/app/travel/cmd/api/internal/types"
+	"home-nest/app/travel/cmd/rpc/travel"
+	"home-nest/pkg/tool"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -33,7 +30,7 @@ func (l *HomestayListLogic) HomestayList(req *types.HomestayListReq) (resp *type
 		PageSize: req.PageSize,
 	})
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewErrMsg("get homestay list fail"), "get homestay list err: %v ", err)
+		return nil, err
 	}
 
 	var list []types.Homestay

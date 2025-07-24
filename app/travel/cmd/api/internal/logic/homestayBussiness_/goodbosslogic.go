@@ -2,6 +2,8 @@ package homestayBussiness_
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"home-nest/app/travel/cmd/rpc/travel"
 
 	"home-nest/app/travel/cmd/api/internal/svc"
 	"home-nest/app/travel/cmd/api/internal/types"
@@ -23,8 +25,22 @@ func NewGoodBossLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GoodBoss
 	}
 }
 
-func (l *GoodBossLogic) GoodBoss(req *types.GoodBossReq) (resp *types.GoodBossResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *GoodBossLogic) GoodBoss(_ *types.GoodBossReq) (resp *types.GoodBossResp, err error) {
+	list, err := l.svcCtx.TravelRpc.GoodBoss(l.ctx, &travel.GoodBossReq{})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	var res []types.HomestayBusinessBoss
+	if len(list.List) > 0 {
+		for _, v := range list.List {
+			var boss types.HomestayBusinessBoss
+			_ = copier.Copy(&boss, v)
+			res = append(res, boss)
+		}
+	}
+
+	return &types.GoodBossResp{
+		List: res,
+	}, nil
 }

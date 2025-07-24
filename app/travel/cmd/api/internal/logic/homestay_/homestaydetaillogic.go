@@ -2,13 +2,10 @@ package homestay_
 
 import (
 	"context"
-	"github.com/pkg/errors"
-	"home-nest/app/travel/cmd/rpc/travel"
-	"home-nest/pkg/tool"
-	"home-nest/pkg/xerr"
-
 	"home-nest/app/travel/cmd/api/internal/svc"
 	"home-nest/app/travel/cmd/api/internal/types"
+	"home-nest/app/travel/cmd/rpc/travel"
+	"home-nest/pkg/tool"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -32,7 +29,7 @@ func (l *HomestayDetailLogic) HomestayDetail(req *types.HomestayDetailReq) (resp
 		Id: req.Id,
 	})
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewErrMsg("get homestay detail fail"), " get homestay detail err, id: %d, err: %v ", req.Id, err)
+		return nil, err
 	}
 
 	homestay := homestayResp.Homestay

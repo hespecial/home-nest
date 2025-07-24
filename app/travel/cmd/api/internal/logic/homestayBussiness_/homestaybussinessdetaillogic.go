@@ -2,6 +2,8 @@ package homestayBussiness_
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"home-nest/app/travel/cmd/rpc/travel"
 
 	"home-nest/app/travel/cmd/api/internal/svc"
 	"home-nest/app/travel/cmd/api/internal/types"
@@ -25,7 +27,17 @@ func NewHomestayBussinessDetailLogic(ctx context.Context, svcCtx *svc.ServiceCon
 }
 
 func (l *HomestayBussinessDetailLogic) HomestayBussinessDetail(req *types.HomestayBussinessDetailReq) (resp *types.HomestayBussinessDetailResp, err error) {
-	// todo: add your logic here and delete this line
+	detail, err := l.svcCtx.TravelRpc.HomestayBusinessDetail(l.ctx, &travel.HomestayBusinessDetailReq{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	var boss types.HomestayBusinessBoss
+	_ = copier.Copy(&boss, detail.Boss)
+
+	return &types.HomestayBussinessDetailResp{
+		Boss: boss,
+	}, nil
 }
