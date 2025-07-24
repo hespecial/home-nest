@@ -2,8 +2,10 @@ package logic
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"home-nest/app/travel/model"
+	"home-nest/app/usercenter/cmd/rpc/usercenter"
 	"home-nest/pkg/xerr"
 
 	"home-nest/app/travel/cmd/rpc/internal/svc"
@@ -37,14 +39,18 @@ func (l *HomestayBusinessDetailLogic) HomestayBusinessDetail(in *pb.HomestayBusi
 		return nil, errors.Wrapf(ErrHomestayBusinessNotExistsError, "id:%d", in.Id)
 	}
 
+	var boss pb.HomestayBusinessBoss
+	userResp, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{
+		Id: homestayBusiness.UserId,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrMsg("get boss info fail"), "get boss info fail ,  userId : %d ,err:%v", homestayBusiness.UserId, err)
+	}
+	if userResp.User != nil && userResp.User.Id > 0 {
+		_ = copier.Copy(&boss, userResp.User)
+	}
+
 	return &pb.HomestayBusinessDetailResp{
-		Boss: &pb.HomestayBusinessBoss{
-			//Id:       0,
-			UserId:   0,
-			Nickname: "",
-			Avatar:   "",
-			Info:     "",
-			//Rank:     0,
-		},
+		Boss: &boss,
 	}, nil
 }

@@ -65,7 +65,7 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
 		return 0, errors.Wrapf(xerr.NewErrCode(xerr.DbError), "根据手机号查询用户信息失败，mobile:%s,err:%v", mobile, err)
 	}
 	if user == nil {
-		return 0, errors.Wrapf(ErrUserNoExistsError, "mobile:%s", mobile)
+		return 0, errors.Wrapf(ErrUserNotExistsError, "mobile:%s", mobile)
 	}
 
 	if !(tool.Md5ByString(password) == user.Password) {

@@ -51,27 +51,36 @@ func (l *GoodBossLogic) GoodBoss(_ *pb.GoodBossReq) (*pb.GoodBossResp, error) {
 }
 
 func (l *GoodBossLogic) getHomeStayListByActivityList(homestayActivityList []*model.HomestayActivity) ([]*pb.HomestayBusinessBoss, error) {
-	list, err := mr.MapReduce[int64, *usercenter.User, []*pb.HomestayBusinessBoss](
+	// todo 后续补充：去重、排序
+
+	list, err := mr.MapReduce[int64, *model.Homestay, []*pb.HomestayBusinessBoss](
 		func(source chan<- int64) {
 			for _, homestayActivity := range homestayActivityList {
 				source <- homestayActivity.DataId
 			}
 		},
-		func(id int64, writer mr.Writer[*usercenter.User], cancel func(error)) {
-			userResp, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{
-				Id: id,
-			})
+		func(id int64, writer mr.Writer[*model.Homestay], cancel func(error)) {
+			homestay, err := l.svcCtx.HomestayModel.FindOne(l.ctx, id)
 			if err != nil {
-				logx.WithContext(l.ctx).Errorf("GoodListLogic GoodList fail userId : %d ,err:%v", id, err)
+				logx.WithContext(l.ctx).Errorf("GoodListLogic GoodList fail homestayId : %d ,err:%v", id, err)
 				return
 			}
-			if userResp.User != nil && userResp.User.Id > 0 {
-				writer.Write(userResp.User)
+			if homestay != nil {
+				writer.Write(homestay)
 			}
 		},
-		func(pipe <-chan *usercenter.User, writer mr.Writer[[]*pb.HomestayBusinessBoss], cancel func(error)) {
+		func(pipe <-chan *model.Homestay, writer mr.Writer[[]*pb.HomestayBusinessBoss], cancel func(error)) {
 			var list []*pb.HomestayBusinessBoss
-			for user := range pipe {
+			for homestay := range pipe {
+				userResp, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{
+					Id: homestay.UserId,
+				})
+				if err != nil {
+					logx.WithContext(l.ctx).Errorf("GoodListLogic GoodList fail userId : %d ,err:%v", homestay.UserId, err)
+					return
+				}
+				user := userResp.User
+
 				list = append(list, &pb.HomestayBusinessBoss{
 					//Id:       ,
 					UserId:   user.Id,

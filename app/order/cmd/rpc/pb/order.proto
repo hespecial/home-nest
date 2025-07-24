@@ -99,3 +99,6 @@ service order {
     //用户民宿订单
     rpc userHomestayOrderList(UserHomestayOrderListReq)returns(UserHomestayOrderListResp);
 }
+
+// app/order/cmd/rpc
+// goctl rpc protoc ./pb/order.proto --go_out=. --go-grpc_out=. --zrpc_out=./

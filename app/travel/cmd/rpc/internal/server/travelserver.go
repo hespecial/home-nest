@@ -55,7 +55,7 @@ func (s *TravelServer) HomestayBusinessDetail(ctx context.Context, in *pb.Homest
 	return l.HomestayBusinessDetail(in)
 }
 
-func (s *TravelServer) HomestayBusinessList(ctx context.Context, in *pb.HomestayListReq) (*pb.HomestayBusinessListResp, error) {
+func (s *TravelServer) HomestayBusinessList(ctx context.Context, in *pb.HomestayBusinessListReq) (*pb.HomestayBusinessListResp, error) {
 	l := logic.NewHomestayBusinessListLogic(ctx, s.svcCtx)
 	return l.HomestayBusinessList(in)
 }

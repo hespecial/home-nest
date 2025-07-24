@@ -41,7 +41,7 @@ type (
 		// homestay business
 		GoodBoss(ctx context.Context, in *GoodBossReq, opts ...grpc.CallOption) (*GoodBossResp, error)
 		HomestayBusinessDetail(ctx context.Context, in *HomestayBusinessDetailReq, opts ...grpc.CallOption) (*HomestayBusinessDetailResp, error)
-		HomestayBusinessList(ctx context.Context, in *HomestayListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error)
+		HomestayBusinessList(ctx context.Context, in *HomestayBusinessListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error)
 	}
 
 	defaultTravel struct {
@@ -87,7 +87,7 @@ func (m *defaultTravel) HomestayBusinessDetail(ctx context.Context, in *Homestay
 	return client.HomestayBusinessDetail(ctx, in, opts...)
 }
 
-func (m *defaultTravel) HomestayBusinessList(ctx context.Context, in *HomestayListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error) {
+func (m *defaultTravel) HomestayBusinessList(ctx context.Context, in *HomestayBusinessListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error) {
 	client := pb.NewTravelClient(m.cli.Conn())
 	return client.HomestayBusinessList(ctx, in, opts...)
 }

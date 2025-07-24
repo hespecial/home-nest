@@ -102,7 +102,7 @@ service travel {
     // homestay business
     rpc goodBoss(GoodBossReq) returns(GoodBossResp);
     rpc homestayBusinessDetail(HomestayBusinessDetailReq) returns(HomestayBusinessDetailResp);
-    rpc homestayBusinessList(HomestayListReq) returns(HomestayBusinessListResp);
+    rpc homestayBusinessList(HomestayBusinessListReq) returns(HomestayBusinessListResp);
 }
 
 // app/travel/cmd/rpc

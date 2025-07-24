@@ -42,7 +42,7 @@ type TravelClient interface {
 	// homestay business
 	GoodBoss(ctx context.Context, in *GoodBossReq, opts ...grpc.CallOption) (*GoodBossResp, error)
 	HomestayBusinessDetail(ctx context.Context, in *HomestayBusinessDetailReq, opts ...grpc.CallOption) (*HomestayBusinessDetailResp, error)
-	HomestayBusinessList(ctx context.Context, in *HomestayListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error)
+	HomestayBusinessList(ctx context.Context, in *HomestayBusinessListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error)
 }
 
 type travelClient struct {
@@ -113,7 +113,7 @@ func (c *travelClient) HomestayBusinessDetail(ctx context.Context, in *HomestayB
 	return out, nil
 }
 
-func (c *travelClient) HomestayBusinessList(ctx context.Context, in *HomestayListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error) {
+func (c *travelClient) HomestayBusinessList(ctx context.Context, in *HomestayBusinessListReq, opts ...grpc.CallOption) (*HomestayBusinessListResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HomestayBusinessListResp)
 	err := c.cc.Invoke(ctx, Travel_HomestayBusinessList_FullMethodName, in, out, cOpts...)
@@ -137,7 +137,7 @@ type TravelServer interface {
 	// homestay business
 	GoodBoss(context.Context, *GoodBossReq) (*GoodBossResp, error)
 	HomestayBusinessDetail(context.Context, *HomestayBusinessDetailReq) (*HomestayBusinessDetailResp, error)
-	HomestayBusinessList(context.Context, *HomestayListReq) (*HomestayBusinessListResp, error)
+	HomestayBusinessList(context.Context, *HomestayBusinessListReq) (*HomestayBusinessListResp, error)
 	mustEmbedUnimplementedTravelServer()
 }
 
@@ -166,7 +166,7 @@ func (UnimplementedTravelServer) GoodBoss(context.Context, *GoodBossReq) (*GoodB
 func (UnimplementedTravelServer) HomestayBusinessDetail(context.Context, *HomestayBusinessDetailReq) (*HomestayBusinessDetailResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HomestayBusinessDetail not implemented")
 }
-func (UnimplementedTravelServer) HomestayBusinessList(context.Context, *HomestayListReq) (*HomestayBusinessListResp, error) {
+func (UnimplementedTravelServer) HomestayBusinessList(context.Context, *HomestayBusinessListReq) (*HomestayBusinessListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HomestayBusinessList not implemented")
 }
 func (UnimplementedTravelServer) mustEmbedUnimplementedTravelServer() {}
@@ -299,7 +299,7 @@ func _Travel_HomestayBusinessDetail_Handler(srv interface{}, ctx context.Context
 }
 
 func _Travel_HomestayBusinessList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HomestayListReq)
+	in := new(HomestayBusinessListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -311,7 +311,7 @@ func _Travel_HomestayBusinessList_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: Travel_HomestayBusinessList_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TravelServer).HomestayBusinessList(ctx, req.(*HomestayListReq))
+		return srv.(TravelServer).HomestayBusinessList(ctx, req.(*HomestayBusinessListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
