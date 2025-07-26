@@ -2,6 +2,12 @@ package homestayOrder
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
+	"home-nest/app/order/cmd/rpc/order"
+	"home-nest/pkg/ctxdata"
+	"home-nest/pkg/tool"
+	"home-nest/pkg/xerr"
 
 	"home-nest/app/order/cmd/api/internal/svc"
 	"home-nest/app/order/cmd/api/internal/types"
@@ -24,8 +30,34 @@ func NewUserHomestayOrderListLogic(ctx context.Context, svcCtx *svc.ServiceConte
 	}
 }
 
-func (l *UserHomestayOrderListLogic) UserHomestayOrderList(req *types.UserHomestayOrderListReq) (resp *types.UserHomestayOrderListResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *UserHomestayOrderListLogic) UserHomestayOrderList(req *types.UserHomestayOrderListReq) (*types.UserHomestayOrderListResp, error) {
+	userId := ctxdata.GetUidFromCtx(l.ctx) //get login user id
 
-	return
+	resp, err := l.svcCtx.OrderRpc.UserHomestayOrderList(l.ctx, &order.UserHomestayOrderListReq{
+		UserId:      userId,
+		TraderState: req.TradeState,
+		PageSize:    req.PageSize,
+		LastId:      req.LastId,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrMsg("Failed to get user homestay order list"), "Failed to get user homestay order list err : %v ,req:%+v", err, req)
+	}
+
+	var typesUserHomestayOrderList []types.UserHomestayOrderListView
+
+	if len(resp.List) > 0 {
+		for _, homestayOrder := range resp.List {
+
+			var typeHomestayOrder types.UserHomestayOrderListView
+			_ = copier.Copy(&typeHomestayOrder, homestayOrder)
+
+			typeHomestayOrder.OrderTotalPrice = tool.Fen2Yuan(homestayOrder.OrderTotalPrice)
+
+			typesUserHomestayOrderList = append(typesUserHomestayOrderList, typeHomestayOrder)
+		}
+	}
+
+	return &types.UserHomestayOrderListResp{
+		List: typesUserHomestayOrderList,
+	}, nil
 }

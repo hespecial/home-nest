@@ -11,13 +11,6 @@ import (
 	"home-nest/pkg/xerr"
 )
 
-/**
-* @Description rpc service logger interceptor
-* @Author Mikael
-* @Date 2021/1/9 13:35
-* @Version 1.0
-**/
-
 func LoggerInterceptor(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 
 	resp, err = handler(ctx, req)

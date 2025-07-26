@@ -9,8 +9,9 @@ type Config struct {
 	rest.RestConf
 	JwtAuth struct {
 		AccessSecret string
-		AccessExpire int64
 	}
 
-	TravelRpcConf zrpc.RpcClientConf
+	OrderRpcConf   zrpc.RpcClientConf
+	PaymentRpcConf zrpc.RpcClientConf
+	TravelRpcConf  zrpc.RpcClientConf
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/pkg/errors"
 	"home-nest/app/order/model"
 	"home-nest/app/travel/cmd/rpc/travel"
+	"home-nest/pkg/globalkey"
 	"home-nest/pkg/tool"
 	"home-nest/pkg/uniqueid"
 	"home-nest/pkg/xerr"
@@ -75,6 +76,8 @@ func (l *CreateHomestayOrderLogic) CreateHomestayOrder(in *pb.CreateHomestayOrde
 		TradeState:          model.HomestayOrderTradeStateWaitPay,
 		TradeCode:           tool.Krand(8, tool.KcRandKindAll),
 		Remark:              in.Remark,
+		DeleteTime:          time.Unix(0, 0),
+		DelState:            globalkey.DelStateNo,
 	}
 
 	liveDays := int64(order.LiveEndDate.Sub(order.LiveStartDate).Seconds() / 86400)
