@@ -2,7 +2,10 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/hibiken/asynq"
 	"github.com/pkg/errors"
+	"home-nest/app/mqueue/cmd/job/jobtype"
 	"home-nest/app/order/model"
 	"home-nest/app/travel/cmd/rpc/travel"
 	"home-nest/pkg/globalkey"
@@ -17,6 +20,8 @@ import (
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
+
+const CloseOrderTimeMinutes = 5 //defer close order time
 
 type CreateHomestayOrderLogic struct {
 	ctx    context.Context
@@ -94,6 +99,17 @@ func (l *CreateHomestayOrderLogic) CreateHomestayOrder(in *pb.CreateHomestayOrde
 	_, err = l.svcCtx.HomestayOrderModel.Insert(l.ctx, order)
 	if err != nil {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DbError), "Order Database Exception order : %+v , err: %v", order, err)
+	}
+
+	//2、Delayed closing of order tasks.
+	payload, err := json.Marshal(jobtype.DeferCloseHomestayOrderPayload{Sn: order.Sn})
+	if err != nil {
+		logx.WithContext(l.ctx).Errorf("create defer close order task json Marshal fail err :%+v , sn : %s", err, order.Sn)
+	} else {
+		_, err = l.svcCtx.AsynqClient.Enqueue(asynq.NewTask(jobtype.DeferCloseHomestayOrder, payload), asynq.ProcessIn(CloseOrderTimeMinutes*time.Minute))
+		if err != nil {
+			logx.WithContext(l.ctx).Errorf("create defer close order task insert queue fail err :%+v , sn : %s", err, order.Sn)
+		}
 	}
 
 	return &pb.CreateHomestayOrderResp{
