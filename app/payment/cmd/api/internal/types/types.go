@@ -16,10 +16,5 @@ type ThirdPaymentWxPayReq struct {
 }
 
 type ThirdPaymentWxPayResp struct {
-	Appid     string `json:"appid"`
-	NonceStr  string `json:"nonceStr"`
-	PaySign   string `json:"paySign"`
-	Package   string `json:"package"`
-	Timestamp string `json:"timestamp"`
-	SignType  string `json:"signType"`
+	Status string `json:status`
 }

@@ -1,0 +1,41 @@
+syntax = "v1"
+
+info (
+	title:   "支付服务"
+	desc:    "支付服务"
+	author:  "luxiao"
+	email:   "1478488313@qq.com"
+	version: "v1"
+)
+
+type (
+	CustomCallbackReq {
+		Description string `json:"description"`
+		PaymentSn   string `json:"paymentSn"`
+		NotifyUrl   string `json:"notify_url"`
+		TotalPrice  int64  `json:"total_price"`
+		UserId      int64  `json:"user_id"`
+	}
+	CustomCallbackResp {
+		Status string `json:"status"`
+	}
+	AcceptPaymentReq {
+		UserId int64 `json:"user_id"`
+	}
+	AcceptPaymentResp {
+		Status string `json:"status"`
+	}
+)
+
+service customCallback {
+	@handler handleCallback
+	post /custom-callback (CustomCallbackReq) returns (CustomCallbackResp)
+}
+
+service customCallback {
+	@handler acceptPayment
+	post /accept (AcceptPaymentReq) returns (AcceptPaymentResp)
+}
+
+// app/payment/cmd/custom_callback
+// goctl api go --dir . --api ./desc/custom_callback.api

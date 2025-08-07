@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"home-nest/pkg/interceptor/rpcserver"
 
 	"home-nest/app/payment/cmd/rpc/internal/config"
 	"home-nest/app/payment/cmd/rpc/internal/server"
@@ -33,6 +34,9 @@ func main() {
 		}
 	})
 	defer s.Stop()
+
+	//rpc log
+	s.AddUnaryInterceptors(rpcserver.LoggerInterceptor)
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
