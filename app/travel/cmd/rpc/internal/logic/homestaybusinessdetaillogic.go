@@ -14,7 +14,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-var ErrHomestayBusinessNotExistsError = xerr.NewErrMsg("民宿店铺不存在")
+var ErrHomestayBusinessNotExistsError = xerr.NewErrCodeMsg(xerr.ServerCommonError, "民宿店铺不存在")
 
 type HomestayBusinessDetailLogic struct {
 	ctx    context.Context

@@ -1,0 +1,27 @@
+Name: travel
+Host: 0.0.0.0
+Port: 1003
+Mode: dev
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4006
+  Path: /metrics
+
+Log:
+  ServiceName: travel-api
+  Level: error
+
+UsercenterRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: usercenter.rpc
+  NonBlock: true
+
+TravelRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: travel.rpc
+  NonBlock: true

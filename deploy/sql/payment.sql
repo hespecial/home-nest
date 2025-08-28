@@ -1,9 +1,6 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+create database home_nest_payment;
+use home_nest_payment;
 
--- ----------------------------
--- Table structure for third_payment
--- ----------------------------
 DROP TABLE IF EXISTS `third_payment`;
 CREATE TABLE `third_payment` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -26,9 +23,7 @@ CREATE TABLE `third_payment` (
   `pay_time` datetime NOT NULL DEFAULT '1970-01-01 08:00:00' COMMENT '支付成功时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_sn` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='第三方支付流水记录';
-
-SET FOREIGN_KEY_CHECKS = 1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='第三方支付流水记录';
 
 -- app/payment/model
 -- goctl model mysql datasource --dir . --table third_payment --cache true --url "root:password@tcp(127.0.0.1:3306)/home_nest_payment"

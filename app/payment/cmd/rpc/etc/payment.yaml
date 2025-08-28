@@ -1,0 +1,33 @@
+Name: payment-rpc
+ListenOn: 0.0.0.0:2002
+Mode: dev
+
+Etcd:
+  Hosts:
+    - 127.0.0.1:2382
+  Key: payment.rpc
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4005
+  Path: /metrics
+
+Log:
+  ServiceName: payment-rpc
+  Level: error
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Key: payment-rpc
+
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/home_nest_payment?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+Cache:
+  - Host: 127.0.0.1:6379
+
+KqPaymentUpdatePayStatusConf:
+  Brokers:
+    - 127.0.0.1:9092
+  Topic: payment-update-paystatus-topic

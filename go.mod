@@ -5,12 +5,9 @@ go 1.24.0
 require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/golang-jwt/jwt/v4 v4.5.1
-	github.com/golang-module/carbon/v2 v2.6.9
 	github.com/hibiken/asynq v0.25.1
 	github.com/jinzhu/copier v0.4.0
 	github.com/pkg/errors v0.9.1
-	github.com/silenceper/wechat/v2 v2.1.9
-	github.com/wechatpay-apiv3/wechatpay-go v0.2.21
 	github.com/zeromicro/go-queue v1.2.2
 	github.com/zeromicro/go-zero v1.8.1
 	google.golang.org/grpc v1.65.0

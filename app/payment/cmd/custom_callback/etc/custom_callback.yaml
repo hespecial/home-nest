@@ -1,0 +1,13 @@
+Name: custom-callback
+Host: 0.0.0.0
+Port: 8383
+Mode: dev
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4012
+  Path: /metrics
+
+Log:
+  ServiceName: travel-api
+  Level: error

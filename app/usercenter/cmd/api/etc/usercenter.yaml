@@ -1,15 +1,22 @@
 Name: usercenter
 Host: 0.0.0.0
-Port: 8888
+Port: 1004
 
 JwtAuth:
   AccessSecret: ae0536f9-6450-4606-8e13-5a19ed505da0
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4008
+  Path: /metrics
 
 Log:
   ServiceName: usercenter-api
   Level: error
 
 UsercenterRpcConf:
-  Endpoints:
-    - 127.0.0.1:2004
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: usercenter.rpc
   NonBlock: true

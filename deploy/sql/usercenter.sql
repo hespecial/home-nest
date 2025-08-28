@@ -1,9 +1,6 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+create database home_nest_usercenter;
+use home_nest_usercenter;
 
--- ----------------------------
--- Table structure for user
--- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -22,9 +19,6 @@ CREATE TABLE `user` (
   UNIQUE KEY `idx_mobile` (`mobile`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
 
--- ----------------------------
--- Table structure for user_auth
--- ----------------------------
 DROP TABLE IF EXISTS `user_auth`;
 CREATE TABLE `user_auth` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -40,8 +34,6 @@ CREATE TABLE `user_auth` (
   UNIQUE KEY `idx_type_key` (`auth_type`,`auth_key`) USING BTREE,
   UNIQUE KEY `idx_userId_key` (`user_id`,`auth_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户授权表';
-
-SET FOREIGN_KEY_CHECKS = 1;
 
 -- app/usercenter/model
 -- goctl model mysql datasource --dir . --table user --cache true --url "root:password@tcp(127.0.0.1:3306)/home_nest_usercenter"

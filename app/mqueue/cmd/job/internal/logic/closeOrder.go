@@ -41,7 +41,7 @@ func (l *CloseHomestayOrderHandler) ProcessTask(ctx context.Context, t *asynq.Ta
 	}
 
 	if resp.HomestayOrder.TradeState == model.HomestayOrderTradeStateWaitPay {
-		_, err := l.svcCtx.OrderRpc.UpdateHomestayOrderTradeState(ctx, &order.UpdateHomestayOrderTradeStateReq{
+		_, err = l.svcCtx.OrderRpc.UpdateHomestayOrderTradeState(ctx, &order.UpdateHomestayOrderTradeStateReq{
 			Sn:         p.Sn,
 			TradeState: model.HomestayOrderTradeStateCancel,
 		})

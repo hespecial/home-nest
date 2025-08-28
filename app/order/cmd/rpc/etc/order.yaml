@@ -1,0 +1,30 @@
+Name: order-rpc
+ListenOn: 0.0.0.0:2001
+Mode: dev
+
+Etcd:
+  Hosts:
+    - 127.0.0.1:2382
+  Key: order.rpc
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4002
+  Path: /metrics
+
+Log:
+  ServiceName: order-rpc
+  Level: error
+
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/home_nest_order?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+Cache:
+  - Host: 127.0.0.1:6379
+
+TravelRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: travel.rpc
+  NonBlock: true

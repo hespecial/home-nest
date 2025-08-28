@@ -1,0 +1,30 @@
+Name: travel-rpc
+ListenOn: 0.0.0.0:2003
+Mode: dev
+
+Etcd:
+  Hosts:
+    - 127.0.0.1:2382
+  Key: travel.rpc
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4007
+  Path: /metrics
+
+Log:
+  ServiceName: travel-rpc
+  Level: error
+
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/home_nest_travel?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+Cache:
+  - Host: 127.0.0.1:6379
+
+UsercenterRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: usercenter.rpc
+  NonBlock: true

@@ -4,18 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/golang-module/carbon/v2"
 	"github.com/hibiken/asynq"
 	"github.com/pkg/errors"
-	"github.com/silenceper/wechat/v2/miniprogram/subscribe"
 	"home-nest/app/mqueue/cmd/job/internal/svc"
 	"home-nest/app/mqueue/cmd/job/jobtype"
-	"home-nest/app/order/model"
 	"home-nest/app/usercenter/cmd/rpc/usercenter"
 	usercenterModel "home-nest/app/usercenter/model"
-	"home-nest/pkg/globalkey"
-	"home-nest/pkg/tool"
-	"home-nest/pkg/wxminisub"
 	"home-nest/pkg/xerr"
 )
 
@@ -50,72 +44,9 @@ func (l *PaySuccessNotifyUserHandler) ProcessTask(ctx context.Context, t *asynq.
 	if usercenterResp.UserAuth == nil || len(usercenterResp.UserAuth.AuthKey) == 0 {
 		return errors.Wrapf(ErrPaySuccessNotifyFail, "pay success notify user , user no exists err:%v , orderSn:%s , userId:%d", err, p.Order.Sn, p.Order.UserId)
 	}
-	openId := usercenterResp.UserAuth.AuthKey
 
-	// 2、send notify
-	msgs := l.getData(ctx, p.Order, openId)
-	for _, msg := range msgs {
-		//l.SendWxMini(ctx, msg)
-		fmt.Println(msg)
-	}
+	// 2、send notify todo
+	fmt.Println("success notify user, user_id: ", usercenterResp.UserAuth.UserId)
 
 	return nil
 }
-
-// get send data
-func (l *PaySuccessNotifyUserHandler) getData(_ context.Context, order *model.HomestayOrder, openId string) []*subscribe.Message {
-
-	return []*subscribe.Message{
-		{
-			ToUser:     openId,
-			TemplateID: wxminisub.OrderPaySuccessTemplateID,
-			Data: map[string]*subscribe.DataItem{
-				"character_string6": {Value: order.Sn},
-				"thing1":            {Value: order.Title},
-				"amount2":           {Value: fmt.Sprintf("%.2f", tool.Fen2Yuan(order.OrderTotalPrice))},
-				"time4":             {Value: carbon.CreateFromTimestamp(order.LiveStartDate.Unix()).Format(globalkey.DateTimeFormatTplStandardDate)},
-				"time5":             {Value: carbon.CreateFromTimestamp(order.LiveEndDate.Unix()).Format(globalkey.DateTimeFormatTplStandardDate)},
-			},
-		},
-		{
-			ToUser:     openId,
-			TemplateID: wxminisub.OrderPaySuccessLiveKnowTemplateID,
-			Data: map[string]*subscribe.DataItem{
-				"date2":             {Value: carbon.CreateFromTimestamp(order.LiveStartDate.Unix()).Format(globalkey.DateTimeFormatTplStandardDate)},
-				"date3":             {Value: carbon.CreateFromTimestamp(order.LiveEndDate.Unix()).Format(globalkey.DateTimeFormatTplStandardDate)},
-				"character_string4": {Value: order.TradeCode},
-				"thing1":            {Value: "请不要将验证码告知商家以外人员，以防上当"},
-			},
-		},
-	}
-}
-
-// SendWxMini send to wechat mini
-//func (l *PaySuccessNotifyUserHandler) SendWxMini(ctx context.Context, msg *subscribe.Message) {
-//
-//	if l.svcCtx.Config.Mode != service.ProMode {
-//		msg.MiniprogramState = "developer"
-//	} else {
-//		msg.MiniprogramState = "formal"
-//	}
-//
-//	var maxRetryNum int64 = 5
-//	var retryNum int64
-//
-//	//Prevent user slowdown, delays, retries
-//	for {
-//		time.Sleep(time.Duration(1) * time.Second)
-//
-//		err := l.svcCtx.MiniProgram.GetSubscribe().Send(msg)
-//		if err != nil {
-//			if retryNum > maxRetryNum {
-//				logx.WithContext(ctx).Errorf("Payment successful send wechat mini subscription message failed retryNum ： %d , err:%v, msg ： %+v ", retryNum, err, msg)
-//				return
-//			}
-//			retryNum++
-//			continue
-//		}
-//
-//		return
-//	}
-//}

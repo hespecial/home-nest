@@ -17,7 +17,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-var ErrWxPayCallbackError = xerr.NewErrMsg("wechat pay callback fail")
+var ErrPaymentCallbackError = xerr.NewErrMsg("wechat pay callback fail")
 
 type ThirdPaymentWxPayCallbackLogic struct {
 	logx.Logger
@@ -25,7 +25,6 @@ type ThirdPaymentWxPayCallbackLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
-// third payment：wechat pay callback
 func NewThirdPaymentWxPayCallbackLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ThirdPaymentWxPayCallbackLogic {
 	return &ThirdPaymentWxPayCallbackLogic{
 		Logger: logx.WithContext(ctx),
@@ -35,25 +34,6 @@ func NewThirdPaymentWxPayCallbackLogic(ctx context.Context, svcCtx *svc.ServiceC
 }
 
 func (l *ThirdPaymentWxPayCallbackLogic) ThirdPaymentWxPayCallback(_ http.ResponseWriter, req *http.Request) (*types.ThirdPaymentWxPayCallbackResp, error) {
-	////Retrieve the local merchant certificate private key.
-	//_, err := svc.NewWxPayClientV3(l.svcCtx.Config)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//// Get platform certificate accessor
-	//certVisitor := downloader.MgrInstance().GetCertificateVisitor(l.svcCtx.Config.WxPayConf.MchId)
-	//handler, err := notify.NewRSANotifyHandler(l.svcCtx.Config.WxPayConf.APIv3Key, verifiers.NewSHA256WithRSAVerifier(certVisitor))
-	//if err != nil {
-	//	return nil, errors.Wrapf(ErrWxPayCallbackError, "Failed to parse data ,err:%v", err)
-	//}
-	////Verifying signatures, parsing data
-	//transaction := new(payments.Transaction)
-	//_, err = handler.ParseNotifyRequest(context.Background(), req, transaction)
-	//if err != nil {
-	//	return nil, errors.Wrapf(ErrWxPayCallbackError, "Failed to parse data ,err:%v", err)
-	//}
-
 	body, err := io.ReadAll(req.Body)
 	var data Transaction
 	err = json.Unmarshal(body, &data)
@@ -89,13 +69,13 @@ func (l *ThirdPaymentWxPayCallbackLogic) verifyAndUpdateState(notifyTrasaction *
 		Sn: notifyTrasaction.PaymentSn,
 	})
 	if err != nil || paymentResp.PaymentDetail.Id == 0 {
-		return errors.Wrapf(ErrWxPayCallbackError, "Failed to get payment flow record err:%v ,notifyTrasaction:%+v ", err, notifyTrasaction)
+		return errors.Wrapf(ErrPaymentCallbackError, "Failed to get payment flow record err:%v ,notifyTrasaction:%+v ", err, notifyTrasaction)
 	}
 
 	//比对金额
 	notifyPayTotal := notifyTrasaction.TotalPrice
 	if paymentResp.PaymentDetail.PayTotal != notifyPayTotal {
-		return errors.Wrapf(ErrWxPayCallbackError, "Order amount exception  notifyPayTotal:%v , notifyTrasaction:%v ", notifyPayTotal, notifyTrasaction)
+		return errors.Wrapf(ErrPaymentCallbackError, "Order amount exception  notifyPayTotal:%v , notifyTrasaction:%v ", notifyPayTotal, notifyTrasaction)
 	}
 
 	// Judgment status
@@ -117,7 +97,7 @@ func (l *ThirdPaymentWxPayCallbackLogic) verifyAndUpdateState(notifyTrasaction *
 			PayStatus:      l.getPayStatusByWXPayTradeState(notifyTrasaction.TradeState),
 			PayTime:        time.Now().Unix(),
 		}); err != nil {
-			return errors.Wrapf(ErrWxPayCallbackError, "更新流水状态失败  err:%v , notifyTrasaction:%v ", err, notifyTrasaction)
+			return errors.Wrapf(ErrPaymentCallbackError, "更新流水状态失败  err:%v , notifyTrasaction:%v ", err, notifyTrasaction)
 		}
 
 	} else if payStatus == model.ThirdPaymentPayTradeStateWait {

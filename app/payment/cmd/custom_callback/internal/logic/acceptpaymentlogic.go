@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/pkg/errors"
 	"home-nest/app/payment/cmd/custom_callback/internal/svc"
 	"home-nest/app/payment/cmd/custom_callback/internal/types"
 	"home-nest/pkg/tool"
+	"home-nest/pkg/xerr"
 	"io"
 	"net/http"
 
@@ -51,19 +53,26 @@ func (l *AcceptPaymentLogic) AcceptPayment(req *types.AcceptPaymentReq) (*types.
 	b := bytes.NewReader(jsonStr)
 	resp, err := http.Post(data.NotifyUrl, "application/json", b)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.ServerInternalError), "request notify url failed err: %v", err)
 	}
 
-	respBody, _ := io.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.ServerInternalError), "read response body failed err: %v", err)
+	}
 	var Res struct {
-		ReturnCode string `json:"return_code"`
+		Code    int    `json:"code"`
+		Message string `json:"msg"`
+		Data    struct {
+			ReturnCode string `json:"return_code"`
+		} `json:"data"`
 	}
 	err = json.Unmarshal(respBody, &Res)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.ServerInternalError), "unmarshal response body failed err: %v", err)
 	}
 	l.svcCtx.UserPayment.Delete(req.UserId)
 	return &types.AcceptPaymentResp{
-		Status: Res.ReturnCode,
+		Status: Res.Data.ReturnCode,
 	}, nil
 }

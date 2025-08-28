@@ -1,0 +1,15 @@
+Name: mqueue-scheduler
+Mode: dev
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4011
+  Path: /metrics
+
+Log:
+  ServiceName: mqueue-scheduler
+  Level: error
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node

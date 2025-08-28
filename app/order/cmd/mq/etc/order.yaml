@@ -1,0 +1,39 @@
+Name: order-mq
+Mode: dev
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4003
+  Path: /metrics
+
+Log:
+  ServiceName: order-mq
+  Level: error
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+
+PaymentUpdateStatusConf:
+  Name: PaymentUpdateStatus
+  Brokers:
+    - 127.0.0.1:9092
+  Group: payment-update-paystatus-group
+  Topic: payment-update-paystatus-topic
+  Offset: first
+  Consumers: 1
+  Processors: 1
+
+OrderRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: order.rpc
+  NonBlock: true
+
+UsercenterRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: usercenter.rpc
+  NonBlock: true

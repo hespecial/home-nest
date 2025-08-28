@@ -38,7 +38,7 @@ func (l *LoginLogic) Login(in *pb.LoginReq) (*pb.LoginResp, error) {
 	case model.UserAuthTypeSystem:
 		userId, err = l.loginByMobile(in.AuthKey, in.Password)
 	default:
-		return nil, xerr.NewErrCode(xerr.ServerCommonError)
+		return nil, xerr.NewErrCode(xerr.ServerInternalError)
 	}
 	if err != nil {
 		return nil, err

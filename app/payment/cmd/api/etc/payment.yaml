@@ -1,0 +1,40 @@
+Name: payment-api
+Host: 0.0.0.0
+Port: 1002
+Mode: dev
+
+JwtAuth:
+  AccessSecret: ae0536f9-6450-4606-8e13-5a19ed505da0
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4004
+  Path: /metrics
+
+Log:
+  ServiceName: payment-api
+  Level: error
+
+CustomCallback:
+  NotifyUrl : http://127.0.0.1/payment/v1/thirdPayment/thirdPaymentWxPayCallback
+
+PaymentRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: payment.rpc
+  NonBlock: true
+
+OrderRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: order.rpc
+  NonBlock: true
+
+UsercenterRpcConf:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2382
+    Key: usercenter.rpc
+  NonBlock: true

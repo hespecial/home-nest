@@ -1,0 +1,112 @@
+services:
+  nginx:
+    image: nginx:1.28
+    container_name: home-nest-nginx
+    ports:
+      - "80:80"
+    networks:
+      - home-nest
+    volumes:
+      - ./deploy/nginx/conf.d:/etc/nginx/conf.d
+      - ./data/nginx/log:/var/log/nginx
+
+  etcd:
+    image: bitnami/etcd:3.6
+    container_name: home-nest-etcd
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://localhost:2382
+    ports:
+      - "2382:2379"
+    networks:
+      - home-nest
+    volumes:
+      - ./data/etcd/data:/bitnami/etcd
+
+  mysql:
+    image: mysql:8.0
+    container_name: home-nest-mysql
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    networks:
+      - home-nest
+    volumes:
+      - ./data/mysql/data:/var/lib/mysql
+
+  redis:
+    image: redis:8.0
+    container_name: home-nest-redis
+    ports:
+      - "6379:6379"
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      - home-nest
+    volumes:
+      - ./data/redis/data:/data:rw
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: home-nest-prometheus
+    ports:
+      - "9090:9090"
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./deploy/prometheus/server/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus/data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    user: root
+    networks:
+      - home-nest
+
+  grafana:
+    image: grafana/grafana:12.0
+    container_name: home-nest-grafana
+    hostname: grafana
+    user: root
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data/grafana/data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - home-nest
+
+  zookeeper:
+    image: bitnami/zookeeper:3.9
+    container_name: home-nest-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - home-nest
+
+  kafka:
+    image: bitnami/kafka:3.7
+    container_name: home-nest-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+      KAFKA_CFG_LOG_DIRS: /bitnami/kafka/data
+    volumes:
+      - ./data/kafka/data:/bitnami/kafka/data
+    depends_on:
+      - zookeeper
+    networks:
+      - home-nest
+
+networks:
+  home-nest:

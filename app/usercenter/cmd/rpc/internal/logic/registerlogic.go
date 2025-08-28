@@ -15,7 +15,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-var ErrUserAlreadyRegisterError = xerr.NewErrMsg("用户已存在")
+var ErrUserAlreadyRegisterError = xerr.NewErrCodeMsg(xerr.ServerCommonError, "用户已存在")
 
 type RegisterLogic struct {
 	ctx    context.Context

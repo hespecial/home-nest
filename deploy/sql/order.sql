@@ -1,9 +1,6 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+create database home_nest_order;
+use home_nest_order;
 
--- ----------------------------
--- Table structure for homestay_order
--- ----------------------------
 DROP TABLE IF EXISTS `homestay_order`;
 CREATE TABLE `homestay_order` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -39,9 +36,7 @@ CREATE TABLE `homestay_order` (
   `homestay_total_price` bigint NOT NULL DEFAULT '0' COMMENT '民宿总价格(分)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_sn` (`sn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='每一间民宿';
-
-SET FOREIGN_KEY_CHECKS = 1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='民宿订单';
 
 -- app/order/model
 -- goctl model mysql datasource --dir . --table homestay_order --cache true --url "root:password@tcp(127.0.0.1:3306)/home_nest_order"
